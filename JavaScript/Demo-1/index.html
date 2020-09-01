@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript · Jordi Teixidó</title>
+    <script src='js/functions.js'></script>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
+    <link rel="icon" href="img/favicon.jpg" type="image/jpg" />
+  </head>
+<body style="background:#206a5d;">
+    <div class="jumbotron text-center">
+        <h1>Proyecto Demo (1)</h1>
+        <h2>HTML+CSS+JavaScript+BootStrap</h2>
+        <p>Diseño responsive</p> 
+        <h4>Creado por Jordi Teixidó</h4>
+    </div>
+    <div id="contenido" class="container">
+        <div class="row text-center">
+          <div class="col-sm-4">
+            <h3>Gestión Tiempo</h3>
+            <p>Cronómetro</p>
+            <input type='hidden' name='inicial' value=''>
+            <p><button id="iniciarCrono" class="btn btn-primary" type="button" onClick="gestionarCrono();">Iniciar</button></p>
+            <p><button id="reiniciarCrono" class="btn btn-secondary" type="button" onClick="reiniciarCrono();" disabled>Reiniciar</button></p>
+            <p id="crono">00:00:00</p>
+          </div>
+          <div class="col-sm-4">
+            <h3>Gestión de Imágenes</h3>
+            <p><button id="cambiarCapa" class="btn btn-primary" type="button" onClick="cambiarCapa('marco');">Ocultar Capa</button></p>
+            <div id="marco">
+                <p><img id="imagen" src="img/arbol1.jpg"></p>
+                <p><button class="btn btn-primary" type="button" onClick="intercambiarImagen();">Intercambiar Imagen</button></p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <h3>Gestión textos</h3>        
+            <input type='hidden' id='fontSize' value='15'>
+            <p id="texto">
+                Texto de prueba... (15)
+            </p>
+            <p>
+                <button id='reducir' class='btn btn-primary' type='button' onClick='fontSize(-1);'>(-) tamaño</button>
+                <button id='aumentar' class='btn btn-primary' type='button' onClick='fontSize(+1);'>(+) tamaño</button>
+            </p>
+            <p><button class='btn btn-primary' type='button' onClick='cambiarColorTexto();'>Cambiar Color</button></p>
+            <p><button id='mayusculas' class='btn btn-primary' type='button' onClick='mayusculas();'>Mayúsculas</button></p>
+          </div>
+        </div>
+    </div>
+         
+</body>
+</html>

@@ -1,0 +1,18 @@
+body {
+    color:#1b262c;
+    background:#206a5d;
+}
+#contenido {
+    color:#cffffe;
+    background:#206a5d;
+}
+#marco {
+    background:#68b0ab;
+    padding:15px;
+}
+#imagen {
+    width:75%;
+}
+#texto {
+    size:15px;
+}
