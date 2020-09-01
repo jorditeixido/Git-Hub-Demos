@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript · Jordi Teixidó</title>
-    <script src='js/functions.js'></script>
+    <script src="js/functions.js"></script>
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -24,7 +24,7 @@
           <div class="col-sm-4">
             <h3>Gestión Tiempo</h3>
             <p>Cronómetro</p>
-            <input type='hidden' name='inicial' value=''>
+            <input type="hidden" name="inicial" value="">
             <p><button id="iniciarCrono" class="btn btn-primary" type="button" onClick="gestionarCrono();">Iniciar</button></p>
             <p><button id="reiniciarCrono" class="btn btn-secondary" type="button" onClick="reiniciarCrono();" disabled>Reiniciar</button></p>
             <p id="crono">00:00:00</p>
@@ -39,16 +39,16 @@
           </div>
           <div class="col-sm-4">
             <h3>Gestión textos</h3>        
-            <input type='hidden' id='fontSize' value='15'>
+            <input type="hidden" id="fontSize" value="15">
             <p id="texto">
                 Texto de prueba... (15)
             </p>
             <p>
-                <button id='reducir' class='btn btn-primary' type='button' onClick='fontSize(-1);'>(-) tamaño</button>
-                <button id='aumentar' class='btn btn-primary' type='button' onClick='fontSize(+1);'>(+) tamaño</button>
+                <button id="reducir" class="btn btn-primary" type="button" onClick="fontSize(-1);">(-) tamaño</button>
+                <button id="aumentar" class="btn btn-primary" type="button" onClick="fontSize(+1);">(+) tamaño</button>
             </p>
-            <p><button class='btn btn-primary' type='button' onClick='cambiarColorTexto();'>Cambiar Color</button></p>
-            <p><button id='mayusculas' class='btn btn-primary' type='button' onClick='mayusculas();'>Mayúsculas</button></p>
+            <p><button class="btn btn-primary" type="button" onClick="cambiarColorTexto();">Cambiar Color</button></p>
+            <p><button id="mayusculas" class="btn btn-primary" type="button" onClick="mayusculas();">Mayúsculas</button></p>
           </div>
         </div>
     </div>

@@ -78,7 +78,7 @@ function cambiarCapa(capa)
         ocultarCapa(capa);
         texto = MOSTRAR;
     }
-    cambiarTextoBoton('cambiarCapa',texto)
+    cambiarTextoBoton('cambiarCapa', texto)
 }
 
 //GESTIÓN DE TEXTOS
@@ -118,7 +118,7 @@ function cambiarColorTexto()
     let blue = byte();
     
     texto.style.color = rgb(red, green, blue);
-    texto.style.background = rgb(invertir(red),invertir(green),invertir(blue))
+    texto.style.background = rgb(invertir(red), invertir(green), invertir(blue))
 }
 function invertir(color)
 {
@@ -148,19 +148,19 @@ function mayusculas()
 {
     let texto = document.getElementById('texto');
     texto.innerHTML = texto.innerHTML.toLocaleUpperCase();
-    cambiarTextoBoton('mayusculas','Minúsculas');
-    document.getElementById('mayusculas').removeEventListener("click",mayusculas);
-    document.getElementById('mayusculas').addEventListener("click",minusculas);
-    cambiarBoton('mayusculas','btn-primary','btn-success');
+    cambiarTextoBoton('mayusculas', 'Minúsculas');
+    document.getElementById('mayusculas').removeEventListener("click", mayusculas);
+    document.getElementById('mayusculas').addEventListener("click", minusculas);
+    cambiarBoton('mayusculas', 'btn-primary', 'btn-success');
 }
 function minusculas()
 {
     let texto = document.getElementById('texto');
     texto.innerHTML = texto.innerHTML.toLocaleLowerCase();
-    cambiarTextoBoton('mayusculas','Mayúsculas');
-    document.getElementById('mayusculas').removeEventListener("click",minusculas);
-    document.getElementById('mayusculas').addEventListener("click",mayusculas);
-    cambiarBoton('mayusculas','btn-success','btn-primary');
+    cambiarTextoBoton('mayusculas', 'Mayúsculas');
+    document.getElementById('mayusculas').removeEventListener("click", minusculas);
+    document.getElementById('mayusculas').addEventListener("click", mayusculas);
+    cambiarBoton('mayusculas', 'btn-success', 'btn-primary');
 }
 
 // FUNCIONES COMUNES
@@ -192,7 +192,7 @@ function ocultarCapa(capa)
 {
     document.getElementById(capa).style.display = "none";
 }
-function cambiarTextoBoton(boton,texto)
+function cambiarTextoBoton(boton, texto)
 {
     boton=document.getElementById(boton);
     boton.innerHTML = texto;
