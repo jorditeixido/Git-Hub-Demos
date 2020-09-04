@@ -7,6 +7,8 @@ function fantasma(width, height, color, colorDead, x, y, type)
         this.image.src = color;
         this.imageDead = new Image();
         this.imageDead.src = colorDead;
+        this.imageScary = new Image();
+        this.imageScary.src = 'img/fantasmaAsustado.jpg';
     }
     this.width = width;
     this.height = height;
@@ -272,13 +274,19 @@ function fantasma(width, height, color, colorDead, x, y, type)
         return color;
     }
     this.update = function()
-    {
+    {'img/fantasmaAsustado.jpg';
         let ctx = miZonaJuego.context;
         let image;
         if (type == "image") 
         {
             if (this.alive) {
-                image=this.image;
+                if (happyHour==0) {
+                    image=this.image;
+                }
+                else 
+                {
+                    image=this.imageScary;
+                }
             }
             else {
                 image=this.imageDead;
