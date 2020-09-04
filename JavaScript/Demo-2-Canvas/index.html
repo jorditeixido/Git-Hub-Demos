@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JavaScript · Jordi Teixidó</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src='js/settings.js'></script>
+  <script src='js/comecocos.js'></script>  
+  <script src='js/fantasmas.js'></script>  
+  <script src='js/puntos.js'></script>  
+  <script src='js/zonajuego.js'></script>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="icon" href="img/favicon.jpg" type="image/jpg" />
+</head>
+<body style="background:#1f4068;color:#AAAAAA;" onLoad="startGame();">
+
+    <div class="jumbotron text-center" style="background:#a2d5f2;color:#07689f;">
+        <h1>Proyecto Demo (2)</h1>
+        <h2>HTML+CSS+JavaScript+BootStrap+Canvas</h2>
+        <p>Diseño responsive</p> 
+        <h4>Creado por Jordi Teixidó</h4>
+    </div>
+    
+    <div class="container text-center">
+    <div class="row">
+        <div class="col-sm-2">
+            <h3>Controles</h3>
+            <p><button class="btn btn-danger" onClick="clearInterval(miZonaJuego.interval);">PAUSE</button></p>
+            <p><button class="btn btn-success" onClick="miZonaJuego.interval  = setInterval(updateGameArea, 20);">RESTART</button></p>
+            <p><button class="btn btn-warning" onClick="updateZonaJuego()">STEP</button></p>
+        </div>
+        <div id='centro' class="col-sm-8">
+        </div>
+        <div class="col-sm-2">
+            <h3>Informe</h3> 
+            Web en desarrollo       
+            <p id='informe'></p>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
