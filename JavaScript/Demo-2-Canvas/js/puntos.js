@@ -1,22 +1,38 @@
-function punto(width, height, x, y, type) 
+function Punto(ancho, alto, x, y, tipo) 
 {
     //variables
-    this.width = width;
-    this.height = height;
+    this.ancho = ancho;
+    this.alto = alto;
     this.x = x;
     this.y = y;
-    this.type = type;
-    this.update = function()
-    {
-        let ctx = miZonaJuego.context;
-        ctx.fillStyle = "#E8E8E8";
-        if (type==1)
-        {
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.tipo = tipo;
+    this.intermitencia = true;
+    this.tiempoIntermitencia = 0;
 
+    this.pintar = function()
+    {
+        let ctx = pantalla.context;
+        ctx.beginPath();
+        ctx.fillStyle = COLORPUNTOS;
+        if (tipo == 1) 
+        {
+            radio = tipo;
         } else 
         {
-            ctx.fillRect(this.x-3, this.y-3, this.width, this.height);
+            if (this.intermitencia) {
+                radio = RADIOPUNTOAUMENTADO;
+                this.tiempoIntermitencia++;
+            } else 
+            {
+                radio = RADIOPUNTOREDUCIDO;
+                this.tiempoIntermitencia++;
+            }
+            if (this.tiempoIntermitencia==INTERMITENCIA) {
+                this.intermitencia=!this.intermitencia;
+                this.tiempoIntermitencia=0;
+            }
         }
+        ctx.arc(this.x, this.y, radio, 0, 2*Math.PI);
+        ctx.fill();
     }
 }

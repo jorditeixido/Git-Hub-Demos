@@ -1,36 +1,54 @@
-function fantasma(width, height, color, colorDead, x, y, type) 
+/*
+Esta funcion actua como un objeto y controla a los fantasmas del juego
+Cada fantasma se mueve libremente por la pantalla respetando siempre el circuito
+Si se topan con el ComeCocos lo matan, pero si el ComeCocos se ha comido un superpunto
+dispone de cierto tiempo para cazar a los fantasmas (que se mostrarán azules)
+Los fantasmas que sean cazados regresaran automáticamente al cementerio (casilla 
+central) y deberán permanecer allí hasta revivir al cierto tiempo.
+*/
+function Fantasma(ancho, alto, color, x, y, nombre,lentitud) 
 {
-    //variables
-    this.type=type;
-    if (type == "image") {
-        this.image = new Image();
-        this.image.src = color;
-        this.imageDead = new Image();
-        this.imageDead.src = colorDead;
-        this.imageScary = new Image();
-        this.imageScary.src = 'img/fantasmaAsustado.jpg';
+    // VARIABLES
+    this.xInicial=x; //Define la posición x de reinicio
+    this.yInicial=y; //Define la posición y de reinicio
+    this.nombre = nombre; //Define el nombre de Fantasma y su comportamiento
+    this.ancho = ancho; //Define el ancho del fantasma
+    this.alto = alto; //Define el alto del fantasma
+    this.x = x; //Define la posición X actual
+    this.y = y; //Define la posición Y actual
+    this.lentitud = lentitud; //Define la lentitud del fantasma
+    this.direccion; // Define la dirección absoluta U (UP), D (DOWN), L (LEFT) o R (RIGHT)
+    this.direccionX; // Define los saltos de X por cada paso
+    this.direccionY; // Define los saltos de Y por cada paso
+    this.color = color; // Define su color
+    this.tiempoMuerto; // Define el tiempo que dura muerto antes de resucitar
+    this.intermitenciaColor = true; //Define la intermitencia del color al final de tiempoMuerto
+    this.tiempoIntermitencia = 0; //Define la duracción de la intermitencia
+    this.vivo = true; // Define si está vivo o muerto 
+    this.pasos = 0; // Define los pasos que da antes de cambiar aleatoriamente de rumbo
+    this.enCementerio = true; //Define si se encuentra en la zona del cementerio
+    this.ondulacionSabana=true; //Define la ondulación de su sábana alternativamente
+
+    //FUNCIONES
+    this.reiniciar = function()
+    {
+        this.x = this.xInicial;
+        this.y = this.yInicial;
+        this.intermitenciaColor = true; 
+        this.tiempoIntermitencia = 0; 
+        this.vivo = true; 
+        this.pasos = 0; 
+        this.enCementerio = true; 
+        this.ondulacionSabana=true; 
     }
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y; 
-    this.direccion;
-    this.direccionX;
-    this.direccionY;
-    this.color = color;
-    this.colorDead = colorDead;
-    this.deadTime;
-    this.alive = true;
-    this.pasos = 0;
-    this.cementerio = true;
-    
-    //funciones
+    //Devuelve una dirección al azar entre las 2 dadas
     this.direccionAzar = function (a,b)
     {
         let opciones=[a,b];
         let azar=Math.round(Math.random());
         return opciones[azar];
     }
+    //Define su dirección inicial en relación a su posición actual
     this.orientar = function()
     {
         this.pasos = 1 + Math.round((Math.random() * 1000));
@@ -49,6 +67,7 @@ function fantasma(width, height, color, colorDead, x, y, type)
             }
         }
     }
+    //Devuelve si se encuentra en un cruce entre un ejeX y un ejeY
     this.estaEnCruce = function()
     {
         var estaEnCruce = false;
@@ -57,6 +76,7 @@ function fantasma(width, height, color, colorDead, x, y, type)
         }
         return estaEnCruce;
     }
+    //Devuelve la dirección inversa de la actual
     this.direccionInversa = function()
     {
         let direccionInversa="";
@@ -77,11 +97,14 @@ function fantasma(width, height, color, colorDead, x, y, type)
         }
         return direccionInversa;
     }
+    //Invierte la dirección actual
     this.invertirDireccion = function()
     {
-        this.direccion=this.direccionInversa(this.direccion);
+        //this.direccion=this.direccionInversa(this.direccion);
+        this.direccion=DIRECCIONINVERSA[this.direccion];
         this.direccionar();
     }
+    //Define los movimientos en X e Y según la dirección
     this.direccionar = function ()
     {
         switch(this.direccion)
@@ -104,6 +127,7 @@ function fantasma(width, height, color, colorDead, x, y, type)
                 break;
         }
     }
+    //Establece una dirección inicial en relación al cruce en el que está creado
     this.direccionInicial = function ()
     {
         let indexX=EJESX.indexOf(this.x);
@@ -114,17 +138,19 @@ function fantasma(width, height, color, colorDead, x, y, type)
         this.direccion=direccion;
         this.invertirDireccion();
     }
+    //Define la dirección al llegar a un cruce
     this.pasarCruce = function ()
     {
         this.direccion=this.elegirDireccion();
         this.direccionar();
     }
+    //Devuelve la dirección desde el cruce en el que está
     this.elegirDireccion = function()
     {
         let indexX=EJESX.indexOf(this.x);
         let indexY=EJESY.indexOf(this.y);
         let direccion="";
-        if (this.alive==true) 
+        if (this.vivo==true) 
         {
             do 
             {
@@ -140,91 +166,64 @@ function fantasma(width, height, color, colorDead, x, y, type)
         }   
         return direccion;
     }
-    this.moverComecocos = function () 
-    {
-        if (this.estaEnCruce()) 
-        {
-            //Comprobar que direccion puede tomar y permitir el movimiento
-            let indexX=EJESX.indexOf(this.x);
-            let indexY=EJESY.indexOf(this.y);
-            let opciones=CRUCES[indexX+(10*indexY)];
-            if (opciones.includes('U') && this.direccionY==-1)
-            {
-                this.y=this.y+this.direccionY;
-            } else if (opciones.includes('D') && this.direccionY==1)
-            {
-                this.y=this.y+this.direccionY;
-            } else if (opciones.includes('L') && this.direccionX==-1)
-            {
-                this.x=this.x+this.direccionX;
-            } else if (opciones.includes('R') && this.direccionX==1)
-            {
-                this.x=this.x+this.direccionX;
-            }
-        } else 
-        {
-            if (EJESX.includes(this.x)) {
-                this.y=this.y+this.direccionY;
-                //informar('EJE X');
-            } 
-            if (EJESY.includes(this.y)) {
-                this.x=this.x+this.direccionX;
-                this.siHiperEspacio();
-                //informar('EJE Y');
-            }
-        }
-    }
+    //Controla el movimiento del Fantasma según su estado y situación
     this.mover = function() 
     {
-        if (this.alive==false && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
+        if (reloj%this.lentitud==0) 
         {
-            this.cementerio=true;
-        }
-        if (this.cementerio==true) 
-        {
-            this.movimientoCementerio();
-        } else 
-        {
-            if (this.estaEnCruce()) 
+            if (this.vivo==false && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
             {
-                this.pasarCruce();
-            } 
-            if (EJESY.includes(this.y)) 
+                this.enCementerio=true;
+            }
+            if (this.enCementerio==true) 
             {
-                this.x += this.direccionX;
-                this.siHiperEspacio();
-            } 
-            if (EJESX.includes(this.x)) 
+                this.movimientoCementerio();
+            } else 
             {
-                this.y += this.direccionY;
+                if (this.estaEnCruce()) 
+                {
+                    this.pasarCruce();
+                } 
+                if (EJESY.includes(this.y)) 
+                {
+                    this.x += this.direccionX;
+                    this.siHiperEspacio();
+                } 
+                if (EJESX.includes(this.x)) 
+                {
+                    this.y += this.direccionY;
+                }
             }
         }
+        this.actualizar();
     }
+    //Controla el paso del tunel de hiperEspacio
     this.siHiperEspacio = function()
     {
         if (this.y==EJESY[4]) //Puede estar en el tunel de Hiperespacio
         {
-            if(this.x==-(2*ANCHOBICHOS) && this.direccionX==-1) {this.x=ANCHO+ANCHOBICHOS;}
-            if(this.x==(ANCHO+ANCHOBICHOS) && this.direccionX==1) {this.x=-(2*ANCHOBICHOS)}
+            if(this.x==-(2*ANCHOBICHOS) && this.direccionX==-1) {this.x=ANCHO+(2*ANCHOBICHOS);}
+            if(this.x==(ANCHO+(2*ANCHOBICHOS)) && this.direccionX==1) {this.x=-(2*ANCHOBICHOS)}
         }
     }
+    //Controla el movimiento especial para entrar, permanecer y salir del cementerio
     this.movimientoCementerio = function()
     {
-        if (this.alive==true && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
+        if (this.vivo==true && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
         {
             this.direccion=this.direccionAzar('L','R');
-            this.cementerio=false;
+            this.enCementerio=false;
             this.direccionar();
         }
-        else if (this.alive==false && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
+        else if (this.vivo==false && this.x==CEMENTERIO['x'] && this.y==CEMENTERIO['y'])
         {
             this.direccion="D";
             this.direccionar();
-        } else if (this.alive==true && this.x==CEMENTERIO['x'] && this.y==BUC) 
+        } else if (this.vivo==true && this.x==CEMENTERIO['x'] && this.y==BUC) 
         {
             this.direccion="U";
             this.direccionar();
-        } else if (this.alive==false && this.x==CEMENTERIO['x'] && this.y==BUC) 
+        } else if (this.vivo==false && this.x==CEMENTERIO['x'] && this.y==BUC) 
         {
             this.direccion="R";
             this.direccionar();
@@ -247,12 +246,13 @@ function fantasma(width, height, color, colorDead, x, y, type)
         }
         this.x=this.x+this.direccionX;
         this.y=this.y+this.direccionY;
-        this.deadTime--;
-        if (this.deadTime==0) 
+        this.tiempoMuerto--;
+        if (this.tiempoMuerto==0) 
         {
-            this.revive();
+            this.revivir();
         }
     }
+    //Controla los pasos en una dirección determinada antes de cambiar de sentido
     this.caminar = function()
     {
         if (this.pasos == 0) {
@@ -261,61 +261,128 @@ function fantasma(width, height, color, colorDead, x, y, type)
         this.mover();
         this.pasos--;
     }
+    //Define el color del fantasma en función del momento
     this.colorear = function()
     {
         var color;
-        if (this.alive)
+        if (tiempoCaza==0)
         {
             color=this.color;
         } else 
         {
-            color=this.colorDead;
+            if (tiempoCaza>250)
+            {
+                color="#0000FF";
+            }
+            else 
+            {
+                if (this.intermitenciaColor) {
+                    color="#0000FF";
+                    this.tiempoIntermitencia++;
+                } else 
+                {
+                    color="#AAAABB";
+                    this.tiempoIntermitencia++;
+                }
+                if (this.tiempoIntermitencia==(INTERMITENCIA/4)) {
+                    this.intermitenciaColor=!this.intermitenciaColor;
+                    this.tiempoIntermitencia=0;
+                }
+            }
         }
         return color;
     }
-    this.update = function()
-    {'img/fantasmaAsustado.jpg';
-        let ctx = miZonaJuego.context;
-        let image;
-        if (type == "image") 
+    //Pinta el fantasma en su nueva posición
+    this.actualizar = function()
+    {
+        this.pintar();
+    }
+    //Elige el color del 
+    this.pintar = function () 
+    {
+        let ctx = pantalla.context;
+        let matriz;
+        //Solo se dibuja al fantasma cuando está vivo
+        if (this.vivo==true) 
         {
-            if (this.alive) {
-                if (happyHour==0) {
-                    image=this.image;
-                }
-                else 
-                {
-                    image=this.imageScary;
-                }
-            }
-            else {
-                image=this.imageDead;
-            }
-            ctx.drawImage(image,
-              this.x,
-              this.y,
-              this.width, this.height);
-        }
-        else 
-        {
+            //El color depende del tiempo de caza
             ctx.fillStyle = this.colorear();
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            if (this.ondulacionSabana) {matriz = FANTASMA1;} 
+                                  else {matriz = FANTASMA2;}
+            this.ondulacionSabana=!this.ondulacionSabana;
+            //Rellenear Matriz
+            for (y=0;y<20;y++) 
+            {
+                for (x=0;x<20;x++)
+                {
+                    if (matriz[x+(20*y)]==1)
+                    {
+                        ctx.fillRect(this.x+x, this.y+y, 1, 1);    
+                    }
+                }
+            }
+        } 
+        this.pintarOjos();
+    }
+    //Pinta los ojos del fantasma según su dirección 
+    this.pintarOjos = function()
+    {
+        let ctx = pantalla.context;
+        let posicionX=6;
+        let variacionX=0;
+        let posicionY=6;
+        let variacionY=0;
+        let separacion=8;
+
+        switch (this.direccion) 
+        {
+            case 'U':
+                variacionY=-2;
+                break;
+            case 'D':
+                variacionY=+2;
+                break;
+            case 'L':
+                variacionX=-2;
+                break;
+            case 'R':
+                variacionX=+2;
+                break;
+        }
+        for (let i=0;i<=1;i++)
+        {
+            ctx.beginPath();
+            ctx.arc(this.x+posicionX+variacionX+(i*separacion), 
+                    this.y+posicionY+variacionY, 3, 0, 2*Math.PI);
+            ctx.fillStyle = '#FEFFFF';
+            ctx.fill();
+        }
+        this.pintarPupilas(posicionX,variacionX,posicionY,variacionY);
+    }
+    //Pinta las pupilas del fantasma según su dirección 
+    this.pintarPupilas = function(posicionX,variacionX,posicionY,variacionY)
+    {
+        let ctx = pantalla.context;
+        let separacion=8;
+
+        for (let i=0;i<=1;i++)
+        {
+            ctx.beginPath();
+            ctx.arc(this.x+posicionX+(2*variacionX)+(i*separacion), this.y+posicionY+(2*variacionY), 1, 0, 2*Math.PI);
+            ctx.fillStyle = '#103196';
+            ctx.fill();
         }
     }
-    this.kill = function()
+    //Mata al fantasma cazado
+    this.matar = function()
     {
-        this.alive=false;
-        this.deadTime=DEADTIME;
+        sonidoComeFantasma.iniciar();
+        this.vivo=false;
+        this.tiempoMuerto=TIEMPOMUERTO;
     }
-    this.revive = function ()
+    //Revive al fantasma
+    this.revivir = function ()
     {
-        this.alive=true;
-    }
-    this.coordenadas = function()
-    {
-        let texto="";
-        texto+="x="+comeCocos.x+"<br>";
-        texto+="y="+comeCocos.y+"<br>";
-        //informar(texto);
+        this.vivo=true;
     }
 }

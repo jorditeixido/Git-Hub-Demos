@@ -1,8 +1,10 @@
 const ANCHO = 500; //Ancho de la imagen de fondo
-const ALTO = 500; //Alto de la imagen de fondo
-const MINX = 12;
-const MAXX = 462;
-const EJESX = [MINX,48,102,156,210,264,318,372,426,MAXX]; //Puntos de intersección
+const ALTO = 550; //Alto de la imagen de fondo
+const ANCHOX = 18;
+const ANCHOY = 16;
+const MINX = 16;
+const MAXX = 466;
+const EJESX = [MINX,52,106,160,214,268,322,376,430,MAXX]; //Puntos de intersección
 const MINY = 15;
 const MAXY = 463;
 const EJESY = [MINY,79,127,175,223,271,319,367,415,MAXY]; //Puntos de intersección
@@ -50,6 +52,7 @@ const CRUCES = [ESI,HRL,TED,HRL,ESD,ESI,HRL,TED,HRL,ESD,
                 EII,ESD,TER,TED,TEU,TEU,TED,TEL,ESI,EID,
                 ESI,TEU,EID,EII,ESD,ESI,EID,EII,TEU,ESD,
                 EII,HRL,HRL,HRL,TEU,TEU,HRL,HRL,HRL,EID];
+const TOLERANCIACRUCES = 6;
 const RETORNO = ['R','R','D','L','D','D','L','D','L','L',
                 'R','R','R','D','L','R','D','L','L','L',
                 'R','R','U','R','D','D','L','U','L','L',
@@ -76,35 +79,20 @@ const BORDEIZQUIERDO = MINX;
 const BORDEDERECHO = MAXX; 
 const BORDESUPERIOR = MINY; 
 const BORDEINFERIOR = MAXY; 
-const MATRIZPUNTOS = [1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
-                      1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,
-                      2,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,2,
-                      1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,
-                      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-                      1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,
-                      1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,
-                      1,1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,1,1,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-                      1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
-                      1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,
-                      1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,
-                      2,1,1,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,0,0,1,1,2,
-                      0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,
-                      0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,
-                      1,1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,1,1,
-                      1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,
-                      1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,
-                      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-const DEADTIME = 500; //Tiempo que el bicho permanece muerto
-var velocidad = 10;
+const DIRECCIONINVERSA=[];
+DIRECCIONINVERSA['U']='D';
+DIRECCIONINVERSA['D']='U';
+DIRECCIONINVERSA['L']='R';
+DIRECCIONINVERSA['R']='L';
+const TIEMPOMUERTO = 500; //Tiempo que el bicho permanece muerto
+const INTERMITENCIA = 100;
+const INTERVALOFRUTAS = 5000;
+const PERMANENCIAFRUTAS = 1000;
+const COLORPUNTOS = "#FDF835";
+const RADIOPUNTOAUMENTADO = 8;
+const RADIOPUNTOREDUCIDO = 6;
+const PUNTOSVIDAEXTRA = 20000;
+const ACELERADORNIVEL = 5;
+const CADENCIASONIDO = 1;
+var velocidad = 15;
 

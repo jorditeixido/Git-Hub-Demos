@@ -5,10 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src='js/settings.js'></script>
+  <script src='js/matrices.js'></script>
+  <script src='js/sonidos.js'></script>
   <script src='js/comecocos.js'></script>  
   <script src='js/fantasmas.js'></script>  
   <script src='js/puntos.js'></script>  
-  <script src='js/zonajuego.js'></script>
+  <script src='js/carteles.js'></script>  
+  <script src='js/frutas.js'></script>  
+  <script src='js/pantalla.js'></script>  
+  <script src='js/juego.js'></script>
   <link href="css/style.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -16,9 +21,9 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="icon" href="img/favicon.jpg" type="image/jpg" />
 </head>
-<body style="background:#1f4068;color:#AAAAAA;" onLoad="startGame();">
+<body style="background:#1f4068;color:#AAAAAA;" onLoad="inicializarJuego();">
 
-    <div class="jumbotron text-center" style="background:#a2d5f2;color:#07689f;">
+    <div class="jumbotron text-center cabecera" style="background:#a2d5f2;color:#07689f;">
         <h1>Proyecto Demo (2)</h1>
         <h2>HTML+CSS+JavaScript+BootStrap+Canvas</h2>
         <p>Diseño responsive</p> 
@@ -29,16 +34,22 @@
     <div class="row">
         <div class="col-sm-2">
             <h3>Controles</h3>
-            <p><button class="btn btn-danger" onClick="clearInterval(miZonaJuego.interval);">PAUSE</button></p>
-            <p><button class="btn btn-success" onClick="miZonaJuego.interval  = setInterval(updateGameArea, 20);">RESTART</button></p>
-            <p><button class="btn btn-warning" onClick="updateZonaJuego()">STEP</button></p>
+            <p><button class="btn btn-danger" onClick="clearInterval(pantalla.intervalo);">PAUSE</button></p>
+            <p><button class="btn btn-success" onClick="pantalla.intervalo  = setInterval(actualizarPantalla, velocidad);">RESTART</button></p>
+            <p><button class="btn btn-warning" onClick="actualizarPantalla()">STEP</button></p>
+            <p id='reloj'>Reloj=0</p>
+            <hr>
+            <p id='nivel'></p>
+            <hr>
+            <p id='velocidad'></p>
+            <hr>
         </div>
         <div id='centro' class="col-sm-8">
         </div>
         <div class="col-sm-2">
-            <h3>Informe</h3> 
-            Web en desarrollo       
-            <p id='informe'></p>
+            <h5 style="color:#FF0000;">WEB EN DESARROLLO</h5>
+            <h5>DETALLES:</h5>
+            <p id='detalles'></p>
         </div>
     </div>
     </div>

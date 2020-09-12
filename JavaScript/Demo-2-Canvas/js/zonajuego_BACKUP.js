@@ -9,7 +9,6 @@ var puntosXfantasma;//Define la puntuación que aporta cazar a cada fantasma
 var fondo = new Image();//Define la imagen de fondo de la pantallas
     fondo.src = 'img/fondo.jpg';
 var frutas=[];
-var juego;
 
 function startGame() 
 {
@@ -34,16 +33,13 @@ function startGame()
             i++;
         }
     }
-    juego = new pantalla();
-    juego.start();
+    
+    miZonaJuego.start();
 }
-function pantalla() 
+var miZonaJuego = 
 {
-    this.canvas = document.createElement("canvas");
-    this.context;
-    this.interval;
-
-    this.start = function() 
+    canvas : document.createElement("canvas"),
+    start : function() 
     {
         this.canvas.width = ANCHO;
         this.canvas.height = ALTO;
@@ -53,32 +49,32 @@ function pantalla()
         this.interval  = setInterval(updateZonaJuego, velocidad);
         window.addEventListener('keydown', function (e) 
         {
-            juego.keys = (juego.keys || []);
-            juego.keys[e.keyCode] = true;
+            miZonaJuego.keys = (miZonaJuego.keys || []);
+            miZonaJuego.keys[e.keyCode] = true;
         })
         window.addEventListener('keyup', function (e) 
         {
-            juego.keys[e.keyCode] = false;
+            miZonaJuego.keys[e.keyCode] = false;
         })
     },
-    this.clear = function() 
+    clear : function() 
     {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 function updateZonaJuego() 
 {
-    juego.clear();
-    juego.context.fillStyle = "#000000";
-    juego.context.fillRect(0, 500, ANCHO, 50);
-    juego.context.drawImage(fondo, 0, 0);
-    juego.context.font = "30px Comic Sans MS";
-    juego.context.fillStyle = "#FEFEFE";
-    juego.context.fillText("SCORE ",10,535);
-    juego.context.fillText("LIVES ",270,535);
-    juego.context.fillStyle = "#FFF42A";
-    juego.context.fillText(puntuacion,125,535);
-    juego.context.fillText(vidas,375,535);
+    miZonaJuego.clear();
+    miZonaJuego.context.fillStyle = "#000000";
+    miZonaJuego.context.fillRect(0, 500, ANCHO, 50);
+    miZonaJuego.context.drawImage(fondo, 0, 0);
+    miZonaJuego.context.font = "30px Comic Sans MS";
+    miZonaJuego.context.fillStyle = "#FEFEFE";
+    miZonaJuego.context.fillText("SCORE ",10,535);
+    miZonaJuego.context.fillText("LIVES ",270,535);
+    miZonaJuego.context.fillStyle = "#FFF42A";
+    miZonaJuego.context.fillText(puntuacion,125,535);
+    miZonaJuego.context.fillText(vidas,375,535);
     if (frutas.length>0) {
         frutas[0].pintar();
         if (comeCocos.toparCon(frutas[0]))
@@ -90,7 +86,7 @@ function updateZonaJuego()
     }
     puntos.forEach(puntosFunction)
     function puntosFunction(punto) {
-        punto.pintar();
+        punto.actualizar();
     }    
     if (tiempoCaza>0) {
         tiempoCaza--;
@@ -102,10 +98,10 @@ function updateZonaJuego()
     }
     comeCocos.direccionX = 0;
     comeCocos.direccionY = 0;
-    if (juego.keys && juego.keys[37]) {comeCocos.direccionar('L');}
-    if (juego.keys && juego.keys[39]) {comeCocos.direccionar('R');}
-    if (juego.keys && juego.keys[38]) {comeCocos.direccionar('U');}
-    if (juego.keys && juego.keys[40]) {comeCocos.direccionar('D');}
+    if (miZonaJuego.keys && miZonaJuego.keys[37]) {comeCocos.direccionar('L');}
+    if (miZonaJuego.keys && miZonaJuego.keys[39]) {comeCocos.direccionar('R');}
+    if (miZonaJuego.keys && miZonaJuego.keys[38]) {comeCocos.direccionar('U');}
+    if (miZonaJuego.keys && miZonaJuego.keys[40]) {comeCocos.direccionar('D');}
     comeCocos.mover();
     comeCocos.actualizar();
 
